@@ -28,6 +28,15 @@ axios.get('https://api.github.com/users/ginabethrussell')
     const nextUser = 'barbaralois';
     return nextUser;
   })
+  .then(user=> {
+    axios.get('http://api.github.com/users/' + user)
+    .then(response => {
+      const entryPoint = document.querySelector('.cards');
+      const userCard = createCard(response.data);
+      entryPoint.appendChild(userCard);
+    })
+    return user;
+  })
   .then((user) => {
     postFollowers(user);
   })
@@ -113,6 +122,15 @@ function createCard(userObj){
   const bioP = document.createElement('p');
   bioP.textContent = `Bio: ${userObj.bio} `;
 
+  // button to expand for more info
+  const btn = document.createElement('button');
+  btn.textContent = 'More Info';
+  btn.classList.add('info-button');
+  btn.addEventListener('click', (e)=> {
+    console.log("More info coming soon");
+    e.preventDefault();
+    card.classList.toggle('expand');
+  })
   // assemble card
   card.appendChild(image);
   card.appendChild(cardInfo);
@@ -123,6 +141,7 @@ function createCard(userObj){
   cardInfo.appendChild(followersP);
   cardInfo.appendChild(followingP);
   cardInfo.appendChild(bioP);
+  card.appendChild(btn);
 
   // return card DOM element
   return card;

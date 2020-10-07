@@ -123,5 +123,10 @@ body {
   margin: 3px 0 10px;
 }
 
-
-
+.info-button {
+  align-self: flex-start;
+  width: 100px;
+  height: 30px;
+  margin-left: auto;
+  font-size: 1.4rem;
+}

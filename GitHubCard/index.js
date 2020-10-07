@@ -44,15 +44,15 @@ const followersArray = ['jduell12','barbaralois','tetondan','dustinmyers','justs
 //    send a get request
 //    create and user card DOM element
 //    add the DOM element card to the index.html page
-followersArray.forEach(githubName => {
-  axios.get(`https://api.github.com/users/` + githubName)
-  .then(response => {
-    const entryPoint = document.querySelector('.cards');
-    const userCard = createCard(response.data);
-    entryPoint.appendChild(userCard);
-  })
-  .catch(err => console.log(err))
-})
+// followersArray.forEach(githubName => {
+//   axios.get(`https://api.github.com/users/` + githubName)
+//   .then(response => {
+//     const entryPoint = document.querySelector('.cards');
+//     const userCard = createCard(response.data);
+//     entryPoint.appendChild(userCard);
+//   })
+//   .catch(err => console.log(err))
+// })
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -122,7 +122,33 @@ function createCard(userObj){
   return card;
 }
 
-
+// Find and post the followers for Barbara Moore
+// Get data for barbaralois
+axios.get('https://api.github.com/users/' + 'barbaralois')
+  .then(response => {
+    console.log(response.data.followers_url)
+    const barbaraFollowers = [];
+    // use her data.followers_url to get an object of her followers
+    axios.get(response.data.followers_url)
+    .then(response => {
+      // Create an array of followers usernames from the returned object
+      response.data.forEach(follower => {
+      barbaraFollowers.push(follower.login);
+      })
+      console.log(barbaraFollowers);
+      barbaraFollowers.forEach(person => {
+        // iterate over each follower name in the array and send request for user data
+        axios.get('https://api.github.com/users/' + person)
+        .then(response => {
+          // create a card for each follower
+          const entryPoint = document.querySelector('.cards');
+          const userCard = createCard(response.data);
+          entryPoint.appendChild(userCard);
+        })  
+      })
+    })
+  })
+  .catch(err => console.log(err))
 /*
   List of LS Instructors Github username's:
     tetondan

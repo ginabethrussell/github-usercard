@@ -24,6 +24,9 @@ axios.get('https://api.github.com/users/ginabethrussell')
     const entryPoint = document.querySelector('.cards');
     const userCard = createCard(response.data);
     entryPoint.appendChild(userCard);
+    
+    GitHubCalendar(".calendar", "ginabethrussell", { responsive: true });
+
     // set up user for followers posted programmatically
     const nextUser = 'barbaralois';
     return nextUser;
@@ -31,6 +34,7 @@ axios.get('https://api.github.com/users/ginabethrussell')
   .then(user=> {
     axios.get('http://api.github.com/users/' + user)
     .then(response => {
+      console.log(response.data);
       const entryPoint = document.querySelector('.cards');
       const userCard = createCard(response.data);
       entryPoint.appendChild(userCard);
@@ -86,6 +90,7 @@ const followersArray = ['jduell12','barbaralois','tetondan','dustinmyers','justs
         <p>Following: {users following count}</p>
         <p>Bio: {users bio}</p>
       </div>
+      <div class='calendar'></div>
     </div>
 */
 function createCard(userObj){
@@ -131,6 +136,11 @@ function createCard(userObj){
     e.preventDefault();
     card.classList.toggle('expand');
   })
+
+  // create calendar div for contributions
+  const calendarDiv = document.createElement('div');
+  calendarDiv.classList.add('calendar');
+
   // assemble card
   card.appendChild(image);
   card.appendChild(cardInfo);
@@ -142,6 +152,7 @@ function createCard(userObj){
   cardInfo.appendChild(followingP);
   cardInfo.appendChild(bioP);
   card.appendChild(btn);
+  card.appendChild(calendarDiv);
 
   // return card DOM element
   return card;

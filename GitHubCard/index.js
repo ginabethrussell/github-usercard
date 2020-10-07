@@ -18,8 +18,9 @@ import axios from 'axios';
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
-const data = axios.get('https://api.github.com/users/ginabethrussell')
+axios.get('https://api.github.com/users/ginabethrussell')
   .then(response => {
+    console.log(response.data);
     const entryPoint = document.querySelector('.cards');
     const userCard = createCard(response.data);
     entryPoint.appendChild(userCard);
@@ -36,7 +37,22 @@ const data = axios.get('https://api.github.com/users/ginabethrussell')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+// create users array for additional github cards
+const followersArray = ['jduell12','barbaralois','tetondan','dustinmyers','justsml','luishrd','bigknell'];
+
+// iterate over users array to
+//    send a get request
+//    create and user card DOM element
+//    add the DOM element card to the index.html page
+followersArray.forEach(githubName => {
+  axios.get(`https://api.github.com/users/` + githubName)
+  .then(response => {
+    const entryPoint = document.querySelector('.cards');
+    const userCard = createCard(response.data);
+    entryPoint.appendChild(userCard);
+  })
+  .catch(err => console.log(err))
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -61,26 +77,36 @@ function createCard(userObj){
   //create elements, add data from object, add classes
   const card = document.createElement('div');
   card.classList.add('card');
+
   const image = document.createElement('img');
   image.src = userObj.avatar_url;
+
   const cardInfo = document.createElement('div');
   cardInfo.classList.add('card-info');
+
   const h3 = document.createElement('h3');
   h3.classList.add('name');
   h3.textContent = userObj.name;
+
   const userP = document.createElement('p');
   userP.classList.add('username');
   userP.textContent = userObj.login;
+
   const locationP = document.createElement('p');
   locationP.textContent = `Location: ${userObj.location} `;
+
   const profileP = document.createElement('p');
   profileP.innerHTML = `Profile: <a href= "${userObj.html_url}">${userObj.html_url}</a>`;
+
   const followersP = document.createElement('p');
-  followersP.textContent = `Followers: ${userObj.followers_url} `;
+  followersP.textContent = `Followers: ${userObj.followers} `;
+
   const followingP = document.createElement('p');
-  followingP.textContent = `Following: ${userObj.following_url} `;
+  followingP.textContent = `Following: ${userObj.following} `;
+
   const bioP = document.createElement('p');
   bioP.textContent = `Bio: ${userObj.bio} `;
+
   // assemble card
   card.appendChild(image);
   card.appendChild(cardInfo);
@@ -92,6 +118,7 @@ function createCard(userObj){
   cardInfo.appendChild(followingP);
   cardInfo.appendChild(bioP);
 
+  // return card DOM element
   return card;
 }
 

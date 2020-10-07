@@ -1,8 +1,10 @@
+import axios from 'axios';
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+//const data = axios.get('https://api.github.com/users/ginabethrussell');
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -11,12 +13,18 @@
 
     Skip to STEP 3.
 */
-
+//console.log(data);
 /*
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
-
+const data = axios.get('https://api.github.com/users/ginabethrussell')
+  .then(response => {
+    const entryPoint = document.querySelector('.cards');
+    const userCard = createCard(response.data);
+    entryPoint.appendChild(userCard);
+  })
+  .catch(err => console.log(err))
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -49,6 +57,44 @@ const followersArray = [];
       </div>
     </div>
 */
+function createCard(userObj){
+  //create elements, add data from object, add classes
+  const card = document.createElement('div');
+  card.classList.add('card');
+  const image = document.createElement('img');
+  image.src = userObj.avatar_url;
+  const cardInfo = document.createElement('div');
+  cardInfo.classList.add('card-info');
+  const h3 = document.createElement('h3');
+  h3.classList.add('name');
+  h3.textContent = userObj.name;
+  const userP = document.createElement('p');
+  userP.classList.add('username');
+  userP.textContent = userObj.login;
+  const locationP = document.createElement('p');
+  locationP.textContent = `Location: ${userObj.location} `;
+  const profileP = document.createElement('p');
+  profileP.innerHTML = `Profile: <a href= "${userObj.html_url}">${userObj.html_url}</a>`;
+  const followersP = document.createElement('p');
+  followersP.textContent = `Followers: ${userObj.followers_url} `;
+  const followingP = document.createElement('p');
+  followingP.textContent = `Following: ${userObj.following_url} `;
+  const bioP = document.createElement('p');
+  bioP.textContent = `Bio: ${userObj.bio} `;
+  // assemble card
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(h3);
+  cardInfo.appendChild(userP);
+  cardInfo.appendChild(locationP);
+  cardInfo.appendChild(profileP);
+  cardInfo.appendChild(followersP);
+  cardInfo.appendChild(followingP);
+  cardInfo.appendChild(bioP);
+
+  return card;
+}
+
 
 /*
   List of LS Instructors Github username's:

@@ -24,6 +24,12 @@ axios.get('https://api.github.com/users/ginabethrussell')
     const entryPoint = document.querySelector('.cards');
     const userCard = createCard(response.data);
     entryPoint.appendChild(userCard);
+    // set up user for followers posted programmatically
+    const nextUser = 'barbaralois';
+    return nextUser;
+  })
+  .then((user) => {
+    postFollowers(user);
   })
   .catch(err => console.log(err))
 /*
@@ -122,34 +128,36 @@ function createCard(userObj){
   return card;
 }
 
-// Find and post the followers for Barbara Moore
-// Get data for barbaralois
-axios.get('https://api.github.com/users/' + 'barbaralois')
-  .then(response => {
-    console.log(response.data.followers_url)
-    const barbaraFollowers = [];
-    // use her data.followers_url to get an object of her followers
-    axios.get(response.data.followers_url)
+// Find and post the followers for any user
+// Example gets data for barbaralois
+function postFollowers(firstUser){
+  axios.get('https://api.github.com/users/' + firstUser)
     .then(response => {
-      // Create an array of followers usernames from the returned object
-      response.data.forEach(follower => {
-      barbaraFollowers.push(follower.login);
-      })
-      console.log(barbaraFollowers);
-      barbaraFollowers.forEach(person => {
-        // iterate over each follower name in the array and send request for user data
-        axios.get('https://api.github.com/users/' + person)
-        .then(response => {
-          // create a card for each follower
-          const entryPoint = document.querySelector('.cards');
-          const userCard = createCard(response.data);
-          entryPoint.appendChild(userCard);
-        })  
+      console.log(response.data.followers_url)
+      const userFollowers = [];
+      // use her data.followers_url to get an object of her followers
+      axios.get(response.data.followers_url)
+      .then(response => {
+        // Create an array of followers usernames from the returned object
+        response.data.forEach(follower => {
+        userFollowers.push(follower.login);
+        })
+        console.log(userFollowers);
+        userFollowers.forEach(person => {
+          // iterate over each follower name in the array and send request for user data
+          axios.get('https://api.github.com/users/' + person)
+          .then(response => {
+            // create a card for each follower
+            const entryPoint = document.querySelector('.cards');
+            const userCard = createCard(response.data);
+            entryPoint.appendChild(userCard);
+          })  
+        })
       })
     })
-  })
-  .catch(err => console.log(err))
-/*
+    .catch(err => console.log(err))
+  }
+  /*
   List of LS Instructors Github username's:
     tetondan
     dustinmyers

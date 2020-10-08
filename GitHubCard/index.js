@@ -25,7 +25,7 @@ axios.get('https://api.github.com/users/ginabethrussell')
     const userCard = createCard(response.data);
     entryPoint.appendChild(userCard);
     
-    GitHubCalendar(".calendar", "ginabethrussell", { responsive: true });
+    GitHubCalendar(".calendar#ginabethrussell", "ginabethrussell", { responsive: true });
 
     // set up user for followers posted programmatically
     const nextUser = 'barbaralois';
@@ -38,6 +38,9 @@ axios.get('https://api.github.com/users/ginabethrussell')
       const entryPoint = document.querySelector('.cards');
       const userCard = createCard(response.data);
       entryPoint.appendChild(userCard);
+      console.log(user);
+      console.log("next")
+      console.log(GitHubCalendar(".calendar#barbaralois", 'barbaralois', { responsive: true }));
     })
     return user;
   })
@@ -129,17 +132,18 @@ function createCard(userObj){
 
   // button to expand for more info
   const btn = document.createElement('button');
-  btn.textContent = 'More Info';
+  btn.textContent = 'Activity';
   btn.classList.add('info-button');
   btn.addEventListener('click', (e)=> {
     console.log("More info coming soon");
     e.preventDefault();
-    card.classList.toggle('expand');
+    calendarDiv.classList.toggle('expand');
   })
 
   // create calendar div for contributions
   const calendarDiv = document.createElement('div');
   calendarDiv.classList.add('calendar');
+  calendarDiv.id = userObj.login;
 
   // assemble card
   card.appendChild(image);
@@ -181,6 +185,7 @@ function postFollowers(firstUser){
             const entryPoint = document.querySelector('.cards');
             const userCard = createCard(response.data);
             entryPoint.appendChild(userCard);
+            GitHubCalendar(`.calendar#${person}`, person, { responsive: true });
           })  
         })
       })

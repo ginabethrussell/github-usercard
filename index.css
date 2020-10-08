@@ -108,7 +108,9 @@ body {
   border-radius: 3px;
   margin-right: 20px;
 }
-
+.card-info {
+  width: 60%;
+}
 .card .name {
   font-size: 3.4rem;
 }
@@ -133,4 +135,10 @@ body {
 }
 .calendar {
   width: 100%;
+  display: none;
+}
+
+.calendar.expand {
+  margin-top: 20px;
+  display: block; 
 }

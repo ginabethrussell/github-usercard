@@ -135,7 +135,7 @@ function createCard(userObj){
   btn.textContent = 'Activity';
   btn.classList.add('info-button');
   btn.addEventListener('click', (e)=> {
-    console.log("More info coming soon");
+    //console.log("More info coming soon");
     e.preventDefault();
     calendarDiv.classList.toggle('expand');
   })
